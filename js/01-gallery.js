@@ -2,23 +2,47 @@ import { galleryItems } from './gallery-items.js';
 // Change code below this line
 const div = document.querySelector(".gallery");
 
-
-galleryItems.forEach((e,i) => {
+galleryItems.forEach((elem) => {
     const item = document.createElement("div");
     const link = document.createElement("a");
     const img = document.createElement("img");
     
     item.classList.add("gallery__item");
     link.classList.add("gallery__link");
-    link.href = galleryItems[i].original;
+    link.href = elem.original;
     img.classList.add("gallery__image");
-    img.src = galleryItems[i].preview;
-    img.alt = galleryItems[i].description;
-    img.setAttribute("data-source", galleryItems[i].original)
-    div.appendChild(img)
+    img.src = elem.preview;
+    img.alt = elem.description;
+    img.setAttribute("data-source", elem.original);
+    div.append(item)
+    item.append(link);
+    link.append(img);
 })
 
-console.log(galleryItems);
+div.addEventListener("click", imageClick)
+function imageClick(event){
+    event.preventDefault();
+    
+    if(event.target.nodeName !== "IMG"){
+        return;
+    }
+
+    const imageSource = event.target.getAttribute("data-source");
+    const imageDescription = event.target.getAttribute("alt");
+
+    const modalInstance = basicLightbox.create(`
+      <img src="${imageSource}" alt="${imageDescription}">
+    `);
+
+div.addEventListener("keydown", (e) => {
+    if(event.code === "Escape"){
+        modalInstance.close();
+    }
+})
+
+modalInstance.show()
+}
+
 
 
 // Zadanie 1 - galeria obrazów
